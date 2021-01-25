@@ -1,0 +1,49 @@
+
+.cover_url{
+    width: 250rpx;
+    border-radius: 8rpx;
+}
+.mar-left{
+    margin-left: 20rpx;
+}
+.at-card__content-info{
+    position: relative;
+}
+.at-card{
+    margin-bottom: 24rpx;
+    margin: 0 0 24rpx 0;
+}
+.at-card__header-title{
+    flex: none;
+    width: calc(100% - 60rpx);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 30rpx;
+    color: #3377aa;
+}
+.price{
+    color: #e01222;
+}
+.label{
+    color: #818181;
+    font-size: 24rpx;
+}
+.at-card__content-note{
+    margin: 0;
+}
+.card-footer{
+    margin-top: 20rpx;
+    align-content: space-between;
+}
+.card__header-extra{
+    position: absolute;
+    right: 0; 
+}
+.card-body view:not(:first-child){
+    margin-top: 12rpx;
+}
+.slide-image{
+    width:33%;
+    height:250rpx;
+  }
