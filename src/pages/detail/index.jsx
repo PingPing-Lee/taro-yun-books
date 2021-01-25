@@ -19,7 +19,8 @@ class Detail extends Component {
         _id: '',
         bookInfo: {},
         activeNames: '',
-        comment: ''
+        comment: '',
+        submitLoading: false
     }
     // 获取图书详情
     getBookInfo(){
@@ -63,31 +64,51 @@ class Detail extends Component {
     }
     // 评价图书
     comment = ()=>{
-        const { userInfo, comment } = this.state 
-        const _ = db.command
-        const { id } = Taro.Current.router.params
-        const currComments = {
-            author: userInfo.nickName,
-            avatarUrl: userInfo.avatarUrl,
-            content: comment,
-            date: dayjs().format('YYYY-MM-DD HH:mm:ss')
-        }
-        db.collection('books').doc(id).update({
-            data:{
-                comments: _.push([currComments])
-            }
-        }).then(res => {
-            const { bookInfo } = this.state
-            let { comments=[] } = bookInfo
-            comments.push(currComments)
-            this.setState({
-                comment: '',
-                bookInfo: { ...bookInfo, comments }
+        const { userInfo, comment, submitLoading } = this.state 
+        if(!comment){
+            Taro.showToast({
+                icon: 'none',
+                title: '请输入有效评价'
             })
-        })
+            return false;
+        }
+        if(!submitLoading){
+            this.setState({
+                submitLoading: true
+            })
+            const _ = db.command
+            const { id } = Taro.Current.router.params
+            const currComments = {
+                author: userInfo.nickName,
+                avatarUrl: userInfo.avatarUrl,
+                content: comment,
+                date: dayjs().format('YYYY-MM-DD HH:mm:ss')
+            }
+            db.collection('books').doc(id).update({
+                data:{
+                    comments: _.push([currComments])
+                }
+            }).then(res => {
+                const { bookInfo } = this.state
+                let { comments=[] } = bookInfo
+                comments.push(currComments)
+                this.setState({
+                    comment: '',
+                    bookInfo: { ...bookInfo, comments },
+                    submitLoading: false
+                })
+            })
+        }else{
+            Taro.showToast({
+                icon: 'none',
+                title: '正在提交...'
+            })
+        }
+        
+        
     }
     render () {
-        const { userInfo, bookInfo, activeNames } = this.state 
+        const { userInfo, bookInfo, activeNames, submitLoading } = this.state 
         return (
             <View >
                 <View className='thumb'>
@@ -175,7 +196,7 @@ class Detail extends Component {
                         <View class="container ">
                             <View class="label-md">我来说两句</View>
                             <AtTextarea value={this.state.comment} onChange = {this.handleChange} > </AtTextarea>
-                            <AtButton type='primary' onClick={this.comment} className="mar-top">提交</AtButton>
+                            <AtButton loading={submitLoading} type='primary' onClick={this.comment} className="mar-top">提交</AtButton>
                         </View>
                         
                     </View>

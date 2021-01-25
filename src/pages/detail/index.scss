@@ -101,5 +101,8 @@ padding-top: 0;
         margin: 0 0 0 60rpx;
         padding: 0 0 24rpx 0;
         border-bottom: 1PX #d6e4ef solid;
+        &-info{
+            word-break: break-word;
+        }
     }
 }
